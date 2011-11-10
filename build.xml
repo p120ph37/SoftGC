@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="SoftGC" default="demo" basedir=".">
+	<property file="ant.properties"/>
+	<target name="dist">
+		<antcall target="jar"/>
+		<antcall target="clean"/>
+		<antcall target="doc"/>
+	</target>
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="bin" includes="**/*"/>
+		</delete>
+	</target>
+	<target name="build">
+		<javac srcdir="src" destdir="bin" debug="on" listfiles="yes" fork="yes" includeantruntime="false"/>
+	</target>
+	<target name="jar" depends="build">
+		<jar destfile="${name}.jar" level="9">
+			<manifest>
+				<attribute name="Implementation-Title" value="${name}"/>
+				<attribute name="Implementation-Version" value="${version}"/>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Main-Class" value="${entrypoint}"/>
+			</manifest>
+			<fileset dir="bin"/>
+		</jar>
+	</target>
+	<target name="demo" depends="jar">
+		<java jar="${name}.jar" fork="true">
+			<jvmarg value="-Xms${run.minmem}"/>
+			<jvmarg value="-Xmx${run.maxmem}"/>
+		</java>
+	</target>
+	<target name="doc">
+		<javadoc sourcepath="src" destdir="doc"/>
+	</target>
+</project>

@@ -3,8 +3,10 @@ package com.awirtz.softgc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
-
+/**
+ * A simple command-line application to demonstrate SoftGC class.
+ */
+public class Demo {
 	public static void main(String[] args) {
 		System.out.println("SoftGC test...");
 		final Runtime rt = Runtime.getRuntime();
