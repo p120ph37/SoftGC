@@ -50,41 +50,37 @@
 		</exec>
 	</target>
 	<target name="github.doc" depends="doc" description="Push documentation to github">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="page" defaultexcludes="no"/>
+		</delete>
 		<mkdir dir="page"/>
+		<exec executable="git" failonerror="true">
+			<arg value="clone"/>
+			<arg value="-b"/>
+			<arg value="gh-pages"/>
+			<arg value="git@github.com:p120ph37/SoftGC.git"/>
+			<arg value="page"/>
+		</exec>
 		<delete includeemptydirs="true">
-			<fileset dir="page" includes="**/*"/>
+			<fileset dir="page" includes="**/*" excludes=".git*"/>
 		</delete>
 		<copy todir="page">
 			<fileset dir="doc" includes="**/*"/>
 		</copy>
-        <exec executable="git" failonerror="true">
-			<arg value="checkout"/>
-			<arg value="gh-pages"/>
-		</exec>
-		<delete includeemptydirs="true">
-			<fileset dir="." excluded="page"/>
-		</delete>
-		<copy todir=".">
-			<fileset dir="page" includes="**/*"/>
-		</copy>
-		<exec executable="git" failonerror="true">
+		<exec executable="git" dir="page" failonerror="true">
 			<arg value="add"/>
 			<arg value="*"/>
 		</exec>
-		<exec executable="git" failonerror="true">
+		<exec executable="git" dir="page" failonerror="true">
 			<arg value="commit"/>
 			<arg value="-a"/>
 			<arg value="-m"/>
 			<arg value="JavaDoc build"/>
 		</exec>
-		<exec executable="git" failonerror="true">
+		<exec executable="git" dir="page" failonerror="true">
 			<arg value="push"/>
 			<arg value="origin"/>
 			<arg value="gh-pages"/>
-		</exec>
-        <exec executable="git" failonerror="true">
-			<arg value="checkout"/>
-			<arg value="master"/>
 		</exec>
 	</target>
 </project>
