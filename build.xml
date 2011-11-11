@@ -35,7 +35,14 @@
 	<target name="doc" description="Generate documentation">
 		<javadoc sourcepath="src" destdir="doc"/>
 	</target>
-	<target name="github.push.master" depends="dist" description="Push to github master">
+	<target name="github.pull" description="Pull from github master">
+		<exec executable="git" failonerror="true">
+			<arg value="pull"/>
+			<arg value="origin"/>
+			<arg value="master"/>
+		</exec>
+	</target>
+	<target name="github.push" description="Commit and push to github master">
 		<input message="Comment for commit:" addproperty="comment"/>
 		<exec executable="git" failonerror="true">
 			<arg value="commit"/>
@@ -49,7 +56,7 @@
 			<arg value="master"/>
 		</exec>
 	</target>
-	<target name="github.push.gh-pages" depends="dist" description="Merge to gh-pages and push to github">
+	<target name="github.pages" description="Merge to gh-pages and push to github">
 		<exec executable="git" failonerror="true">
 			<arg value="checout"/>
 			<arg value="gh-pages"/>
