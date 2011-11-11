@@ -58,7 +58,7 @@
 	</target>
 	<target name="gh.pages" description="Merge to gh-pages and push to github">
 		<exec executable="git" failonerror="true">
-			<arg value="checout"/>
+			<arg value="checkout"/>
 			<arg value="gh-pages"/>
 		</exec>
 		<exec executable="git" failonerror="true">
@@ -71,7 +71,7 @@
 			<arg value="gh-pages"/>
 		</exec>
 		<exec executable="git" failonerror="true">
-			<arg value="checout"/>
+			<arg value="checkout"/>
 			<arg value="master"/>
 		</exec>
 	</target>
