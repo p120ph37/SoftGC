@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="SoftGC" default="demo" basedir=".">
 	<property file="ant.properties"/>
-	<target name="dist">
+	<target name="dist" description="Build everything for distribution">
 		<antcall target="jar"/>
 		<antcall target="clean"/>
 		<antcall target="doc"/>
 	</target>
-	<target name="clean">
+	<target name="clean" description="Clean built class files and documentation">
 		<delete includeemptydirs="true">
 			<fileset dir="bin" includes="**/*"/>
+			<fileset dir="doc" includes="**/*"/>
 		</delete>
 	</target>
 	<target name="build">
 		<javac srcdir="src" destdir="bin" debug="on" listfiles="yes" fork="yes" includeantruntime="false"/>
 	</target>
-	<target name="jar" depends="build">
+	<target name="jar" depends="build" description="Package JAR">
 		<jar destfile="${name}.jar" level="9">
 			<manifest>
 				<attribute name="Implementation-Title" value="${name}"/>
@@ -25,13 +26,65 @@
 			<fileset dir="bin"/>
 		</jar>
 	</target>
-	<target name="demo" depends="jar">
+	<target name="demo" depends="dist" description="Run demo">
 		<java jar="${name}.jar" fork="true">
 			<jvmarg value="-Xms${run.minmem}"/>
 			<jvmarg value="-Xmx${run.maxmem}"/>
 		</java>
 	</target>
-	<target name="doc">
+	<target name="doc" description="Generate documentation">
 		<javadoc sourcepath="src" destdir="doc"/>
+	</target>
+	<target name="github.push" depends="dist" description="Push modifications to github">
+		<input message="Comment for commit:" addproperty="comment"/>
+		<exec executable="git" failonerror="true">
+			<arg value="commit"/>
+			<arg value="-a"/>
+			<arg value="-m"/>
+			<arg value="${comment}"/>
+		</exec>
+		<exec executable="git" failonerror="true">
+			<arg value="push"/>
+			<arg value="origin"/>
+			<arg value="master"/>
+		</exec>
+	</target>
+	<target name="github.doc" depends="doc" description="Push documentation to github">
+		<mkdir dir="page"/>
+		<delete includeemptydirs="true">
+			<fileset dir="page" includes="**/*"/>
+		</delete>
+		<copy todir="page">
+			<fileset dir="doc" includes="**/*"/>
+		</copy>
+        <exec executable="git" failonerror="true">
+			<arg value="checkout"/>
+			<arg value="gh-pages"/>
+		</exec>
+		<delete includeemptydirs="true">
+			<fileset dir="." excluded="page"/>
+		</delete>
+		<copy todir=".">
+			<fileset dir="page" includes="**/*"/>
+		</copy>
+		<exec executable="git" failonerror="true">
+			<arg value="add"/>
+			<arg value="*"/>
+		</exec>
+		<exec executable="git" failonerror="true">
+			<arg value="commit"/>
+			<arg value="-a"/>
+			<arg value="-m"/>
+			<arg value="JavaDoc build"/>
+		</exec>
+		<exec executable="git" failonerror="true">
+			<arg value="push"/>
+			<arg value="origin"/>
+			<arg value="gh-pages"/>
+		</exec>
+        <exec executable="git" failonerror="true">
+			<arg value="checkout"/>
+			<arg value="master"/>
+		</exec>
 	</target>
 </project>
