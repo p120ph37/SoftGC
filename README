@@ -1,2 +1,17 @@
-See included javadocs or read them online at:
+Download the jar here:
+http://p120ph37.github.com/SoftGC/SoftGC.jar
+
+Read the javadocs online here:
 http://p120ph37.github.com/SoftGC/doc/
+
+Browse the source here:
+https://github.com/p120ph37/SoftGC
+
+Read the demo code here:
+https://github.com/p120ph37/SoftGC/blob/master/src/com/awirtz/softgc/Demo.java
+
+Checkout the repo like this:
+git clone git@github.com:p120ph37/SoftGC.git SoftGC
+
+Run the demo like this:
+ant demo
